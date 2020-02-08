@@ -1,12 +1,27 @@
-var http = require('http');
+var http = require('http'); // requires core NODE module
 var server = http.createServer(handler);
+var fs = require('fs');
 
-var message = "The hills are alive with the sound of music"
+//var message = "The hills are alive with the sound of music"
+
 function handler (request, response) {
+  var endpoint = request.url;
+  console.log(endpoint);
 
-  response.writeHead(200, {"Content-Type": "text/html"});
-  response.write(message); //response body
-  response.end(); // finish response
+  //response.write(message); //response body
+
+  if (endpoint === "/") {
+    response.writeHead(200, {"Content-Type": "text/html"});
+
+    fs.readFile(__dirname + '/public/index.html', function(error, file) {
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      response.end(file);
+    });
+  }
 }
 
 
